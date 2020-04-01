@@ -21,5 +21,9 @@
     "node": ">=6.6.0"
   },
   "author": "Krzysztof Pintscher",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/niou-ns/homebridge-aqara-hub-lux/issues"
+  },
+  "homepage": "https://github.com/niou-ns/homebridge-aqara-hub-lux#readme"
 }
