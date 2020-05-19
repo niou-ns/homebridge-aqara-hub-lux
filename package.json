@@ -17,8 +17,8 @@
     "tinkerhub-discovery": "^0.3.1"
   },
   "engines": {
-    "homebridge": ">=0.2.0",
-    "node": ">=6.6.0"
+    "homebridge": ">=1.0.0",
+    "node": ">=10.17.0"
   },
   "author": "Krzysztof Pintscher",
   "license": "MIT",
