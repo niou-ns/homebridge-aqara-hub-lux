@@ -12,7 +12,8 @@ Config example:
     "name": "Aqara Hub",
     "accessory": "AqaraHubLux",
     "ip": "192.168.0.XXX",
-    "token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    "token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "interval": 60
   }
 ]
 ```
