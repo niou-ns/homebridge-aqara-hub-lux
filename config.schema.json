@@ -1,0 +1,45 @@
+{
+  "pluginAlias": "AqaraHubLux",
+  "pluginType": "accessory",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Aqara Hub",
+        "minLength": 1,
+        "required": true
+      },
+      "ip": {
+        "title": "IP",
+        "type": "string",
+        "required": true
+      },
+      "token": {
+        "title": "Token",
+        "type": "string",
+        "required": true
+      },
+      "interval": {
+        "title": "Refresh interval",
+        "type": "integer",
+        "description": "In seconds.",
+        "default": 60,
+        "required": true
+      }
+    }
+  },
+  "layout": [
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": ["name", "interval"]
+    },
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": ["ip", "token"]
+    }
+  ]
+}
