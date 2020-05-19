@@ -1,7 +1,7 @@
 # homebridge-aqara-hub-lux
 
 Plugin can access Aqara Gateway in order to add it's lux sensor to Homekit via homebridge.
-Wokrs with gateway which identify itself as lumi.gateway.aqhm02 (in my case - Aqara from EU distribution).
+Works with gateway which identify itself as lumi.gateway.aqhm02 (in my case - Aqara from EU distribution).
 
 Code uses "lite" version of <a href="https://github.com/aholstenson/miio">miio</a> by <a href="https://github.com/aholstenson">@aholstenson</a>. I had to modify some parts of that library in order to access gateway, so I've removed unused parts.
 
