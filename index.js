@@ -19,6 +19,7 @@ class AqaraHubLux {
         this.ip = config.ip;
         this.token = config.token;
         this.name = config.name ? config.name : 'Aqara Hub Lux';
+        this.interval = config.interval ? config.interval * 1000 : 60000;
         this.device = {};
 
         if (!this.ip) {
@@ -47,14 +48,37 @@ class AqaraHubLux {
     }
 
     async getCurrentLux(callback) {
-        const illuminance = await this.device.illuminance();
-        this.log.debug('Current lux: ', illuminance.value);
-        callback(null, illuminance.value);
+        if (!this.device.illuminance) {
+            callback(null, 0);
+        } else {
+            const illuminance = await this.callForIlluminance();
+            this.log.info('Current lux:', illuminance.value);
+            callback(null, illuminance.value);
+        }
     }
 
     updateCurrentLux(illuminance) {
-        this.log.debug('Update lux: ', illuminance.value);
+        this.log.info('Update lux:', illuminance.value);
         this.service.getCharacteristic(Characteristic.CurrentAmbientLightLevel).updateValue(illuminance.value);
+    }
+
+    async callForIlluminance() {
+        this.log.debug('Try to call for illuminance...');
+        try {
+            let illumimance = await this.device.miioCall('get_device_prop', ["lumi.0", "illumination"]);
+            this.log.debug('Check lux:', illumimance[0]);
+            return { value: illumimance[0] };
+        } catch (error) {
+            this.log.error(error);
+        }        
+    }
+
+    async illumimanceInterval() {
+        let illumimance = await this.callForIlluminance();
+        if (illumimance.value !== this.service.getCharacteristic(Characteristic.CurrentAmbientLightLevel).value) {
+            this.log.debug('Update called from interval function.');
+            this.updateCurrentLux(illumimance);
+        }
     }
 
     async connect() {
@@ -68,11 +92,15 @@ class AqaraHubLux {
                 this.log.error('Device discovered at %s is not Aqara Gateway', this.ip);
                 return;
             }
+
             this.log.info('Discovered Aqara Gateway (%s) at %s', this.device.miioModel, this.ip);
             this.log.info('Model       : ' + this.device.miioModel);
             this.log.info('Illuminance : ' + this.device.property('illuminance'));
 
             this.device.on('illuminanceChanged', value => this.updateCurrentLux(value));;
+            setInterval(() => {
+                this.illumimanceInterval();
+            }, this.interval);
         } catch(err) {
             this.log.error('Failed to discover Aqara Gateway at %s', this.ip);
             this.log.error('Will retry after 30 seconds');
