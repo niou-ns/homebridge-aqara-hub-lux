@@ -54,7 +54,7 @@ class AqaraHubLux {
         } else {
             const illuminance = await this.callForIlluminance();
             this.log.info('Current lux:', illuminance.value);
-            callback(null, illuminance.value)
+            callback(null, illuminance.value);
         }
     }
 
