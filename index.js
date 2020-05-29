@@ -53,32 +53,36 @@ class AqaraHubLux {
             callback(null, 0);
         } else {
             const illuminance = await this.callForIlluminance();
-            this.log.info('Current lux:', illuminance.value);
-            callback(null, illuminance.value);
+            this.log.debug('Current lux:', illuminance.value);
+            this.log.info('Current calculated lux:', this.calculateIlluminance(illuminance));
+            callback(null, this.calculateIlluminance(illuminance));
         }
     }
 
     updateCurrentLux(illuminance) {
-        this.log.info('Update lux:', illuminance.value);
-        this.service.getCharacteristic(Characteristic.CurrentAmbientLightLevel).updateValue(illuminance.value);
+        this.log.debug('Update lux:', illuminance.value);
+        this.log.info('Update lux with calculated value:', this.calculateIlluminance(illuminance));
+        this.service.getCharacteristic(Characteristic.CurrentAmbientLightLevel).updateValue(this.calculateIlluminance(illuminance));
     }
 
     async callForIlluminance() {
         this.log.debug('Try to call for illuminance...');
         try {
-            let illuminance = await this.device.miioCall('get_device_prop', ["lumi.0", "illumination"]);
+            const illuminance = await this.device.miioCall('get_device_prop', ["lumi.0", "illumination"]);
             this.log.debug('Check lux:', illuminance[0]);
-            illuminance[0] = illuminance[0] * this.unitFactor;
-            this.log.debug('Calculate lux:', illuminance[0]);
             return { value: illuminance[0] };
         } catch (error) {
             this.log.error(error);
         }        
     }
 
+    calculateIlluminance(illumimance) {
+        return Math.round(illumimance.value * this.unitFactor * 100) / 100;
+    }
+
     async illumimanceInterval() {
         let illumimance = await this.callForIlluminance();
-        if (illumimance.value !== this.service.getCharacteristic(Characteristic.CurrentAmbientLightLevel).value) {
+        if (this.calculateIlluminance(illumimance) !== this.service.getCharacteristic(Characteristic.CurrentAmbientLightLevel).value) {
             this.log.debug('Update called from interval function.');
             this.updateCurrentLux(illumimance);
         }
