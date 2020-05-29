@@ -20,6 +20,7 @@ class AqaraHubLux {
         this.token = config.token;
         this.name = config.name ? config.name : 'Aqara Hub Lux';
         this.interval = config.interval ? config.interval * 1000 : 60000;
+        this.unitFactor = config.unitFactor ? config.unitFactor : 0.1;
         this.device = {};
 
         if (!this.ip) {
@@ -65,9 +66,11 @@ class AqaraHubLux {
     async callForIlluminance() {
         this.log.debug('Try to call for illuminance...');
         try {
-            let illumimance = await this.device.miioCall('get_device_prop', ["lumi.0", "illumination"]);
-            this.log.debug('Check lux:', illumimance[0]);
-            return { value: illumimance[0] };
+            let illuminance = await this.device.miioCall('get_device_prop', ["lumi.0", "illumination"]);
+            this.log.debug('Check lux:', illuminance[0]);
+            illuminance[0] = illuminance[0] * this.unitFactor;
+            this.log.debug('Calculate lux:', illuminance[0]);
+            return { value: illuminance[0] };
         } catch (error) {
             this.log.error(error);
         }        
