@@ -13,8 +13,11 @@ Config example:
     "accessory": "AqaraHubLux",
     "ip": "192.168.0.XXX",
     "token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "interval": 60
+    "interval": 60,
+    "unitFactor": 0.1
   }
 ]
 ```
 In order to obtain the token, please follow <a href="https://github.com/Maxmudjon">@Maxmudjon</a> instruction described <a href="https://github.com/Maxmudjon/com.xiaomi-miio/blob/master/docs/obtain_token.md">here</a> (except method 2).
+
+Thanks <a href="https://github.com/esgie">esgie</a> for unit factor idea!
