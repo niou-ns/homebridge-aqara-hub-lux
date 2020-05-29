@@ -27,6 +27,13 @@
         "description": "In seconds.",
         "default": 60,
         "required": true
+      },
+      "unitFactor": {
+        "title": "Unit factor",
+        "type": "number",
+        "description": "Hub provides value x10",
+        "default": 0.1,
+        "required": true
       }
     }
   },
@@ -39,7 +46,12 @@
     {
       "type": "flex",
       "flex-flow": "row wrap",
-      "items": ["ip", "token"]
-    }
+      "items": ["ip", "unitFactor"]
+    },
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": ["token"]
+    }    
   ]
 }
